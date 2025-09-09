@@ -1,8 +1,9 @@
 openapi: 3.0.4
 info:
-  title: Swagger Library - OpenAPI 3.0
+  title: Library-App API - Books & Authors
   description: |-
-    This is a sample Library Server based on the OpenAPI 3.0 specification.
+    Library-App API provides endpoints to manage books and authors.
+    Supports standard CRUD operations and is built with OpenAPI 3.0 specification.
   version: 1.0.12
 servers:
   - url: http://localhost:8080
@@ -12,9 +13,9 @@ security:
 
 tags:
   - name: book
-    description: Everything about book
+    description: CRUD operations for books
   - name: author
-    description: Operation about author
+    description: CRUD operations for authors
 
 paths:
   /book/{bookId}:
