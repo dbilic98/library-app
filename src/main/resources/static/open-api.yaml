@@ -2,8 +2,18 @@ openapi: 3.0.4
 info:
   title: Library-App API - Books & Authors
   description: |-
-    Library-App API provides endpoints to manage books and authors.
-    Supports standard CRUD operations and is built with OpenAPI 3.0 specification.
+    Library-App API provides endpoints to manage books and authors,
+    offering full CRUD operations for both resource types.
+    All endpoints require Basic Authentication, and the API is defined according to the OpenAPI 3.0 specification.
+    
+    **Key features:**
+    - Retrieve a single book or author by ID.
+    - Retrieve lists of books or authors with pagination.
+    - Add new books or authors.
+    - Update existing books or authors.
+    - Delete books or authors.
+
+    Responses include standard HTTP status codes (200, 204, 400, 404, 422) and structured error messages.
   version: 1.0.12
 servers:
   - url: http://localhost:8080
@@ -18,7 +28,7 @@ tags:
     description: CRUD operations for authors
 
 paths:
-  /book/{bookId}:
+  /books/{bookId}:
     get:
       tags:
         - book
@@ -112,7 +122,6 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
-  /book:
     post:
       tags:
         - book
@@ -175,7 +184,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  /author/{authorId}:
+  /authors/{authorId}:
     get:
       tags:
         - author
@@ -269,7 +278,6 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
-  /author:
     post:
       tags:
         - author
