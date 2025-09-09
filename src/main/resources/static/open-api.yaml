@@ -100,6 +100,7 @@ paths:
           required: true
           schema:
             type: integer
+            minimum: 0
             example: 0
         - name: size
           in: query
@@ -107,6 +108,8 @@ paths:
           required: true
           schema:
             type: integer
+            minimum: 1
+            maximum: 10
             example: 10
       responses:
         '200':
@@ -256,6 +259,7 @@ paths:
           required: true
           schema:
             type: integer
+            minimum: 0
             example: 0
         - name: size
           in: query
@@ -263,6 +267,8 @@ paths:
           required: true
           schema:
             type: integer
+            minimum: 1
+            maximum: 10
             example: 10
       responses:
         '200':
