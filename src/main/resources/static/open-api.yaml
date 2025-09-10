@@ -13,7 +13,7 @@ info:
     - Update existing books or authors.
     - Delete books or authors.
 
-    Responses include standard HTTP status codes (200, 204, 400, 404, 422) and structured error messages.
+    Responses include standard HTTP status codes (200, 201, 204, 400, 404) and structured error messages.
   version: 1.0.12
 servers:
   - url: http://localhost:8080
@@ -28,37 +28,33 @@ tags:
     description: CRUD operations for authors
 
 paths:
-  /books/{bookId}:
+  /books/{id}:
     get:
       tags:
         - book
-      summary: Find book by ID.
+      summary: Find book by ID
       operationId: getBookById
       parameters:
         - name: bookId
           in: path
-          description: ID of book to return
+          description: Retrieve a book by ID
           required: true
           schema:
             type: integer
             format: int64
       responses:
         '200':
-          description: successful operation
+          description: Book retrieved successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Book'
+                $ref: "#/components/schemas/Book"
         '400':
-          description: Invalid ID supplied
+          $ref: "#/components/responses/BadRequest"
         '404':
-          description: Book not found
+          $ref: "#/components/responses/NotFound"
         default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
+          $ref: "#/components/responses/UnexpectedError"
 
     delete:
       tags:
@@ -68,7 +64,7 @@ paths:
       parameters:
         - name: bookId
           in: path
-          description: ID of book to delete
+          description: Delete a book by ID
           required: true
           schema:
             type: integer
@@ -76,16 +72,34 @@ paths:
       responses:
         '204':
           description: Book deleted successfully
-        '400':
-          description: Invalid ID supplied
-        '404':
-          description: Book not found
         default:
-          description: Unexpected error
+          $ref: "#/components/responses/UnexpectedError"
+
+    put:
+      tags:
+        - book
+      summary: Update an existing book
+      operationId: updateBook
+      requestBody:
+        description: Update an existing book
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BookUpdateRequest"
+        required: true
+      responses:
+        '200':
+          description: Book retrieved successfully
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/Book"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '404':
+          $ref: "#/components/responses/NotFound"
+        default:
+          $ref: "#/components/responses/UnexpectedError"
 
   /books:
     get:
@@ -113,111 +127,71 @@ paths:
             example: 10
       responses:
         '200':
-          description: successful operation
+          description: List of books retrieved successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PageBook'
+                $ref: "#/components/schemas/PageBook"
+        '400':
+            $ref: "#/components/responses/BadRequest"
         default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
+            $ref: "#/components/responses/UnexpectedError"
 
+  /authors/{id}/books:
     post:
       tags:
-        - book
-      summary: Add a new book to the store.
-      operationId: addBook
+        - author
+      summary: Add a new book for an author
+      operationId: createBookForAuthor
       requestBody:
-        description: Create a new book in the store.
+        description: Create a new book for the given author
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Book'
+              $ref: "#/components/schemas/BookCreateRequest"
         required: true
       responses:
-        '200':
-          description: Successful operation
+        '201':
+          description: Book created successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Book'
+                $ref: "#/components/schemas/Book"
         '400':
-          description: Invalid input
-        '422':
-          description: Validation exception
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-
-    put:
-      tags:
-        - book
-      summary: Update an existing book.
-      operationId: updateBook
-      requestBody:
-        description: Update an existing book in the store
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Book'
-        required: true
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Book'
-        '400':
-          description: Invalid ID supplied
+          $ref: "#/components/responses/BadRequest"
         '404':
-          description: Book not found
-        '422':
-          description: Validation exception
+          $ref: "#/components/responses/NotFound"
         default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
+          $ref: "#/components/responses/UnexpectedError"
 
-  /authors/{authorId}:
+
+  /authors/{id}:
     get:
       tags:
         - author
-      summary: Find author by ID.
+      summary: Find author by ID
       operationId: getAuthorById
       parameters:
         - name: authorId
           in: path
-          description: ID of author to return
+          description: Retrieve a author by ID
           required: true
           schema:
             type: integer
             format: int64
       responses:
         '200':
-          description: successful operation
+          description: Author retrieved successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Author'
+                $ref: "#/components/schemas/Author"
         '400':
-          description: Invalid ID supplied
+          $ref: "#/components/responses/BadRequest"
         '404':
-          description: Author not found
+          $ref: "#/components/responses/NotFound"
         default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
+          $ref: "#/components/responses/UnexpectedError"
 
     delete:
       tags:
@@ -227,7 +201,7 @@ paths:
       parameters:
         - name: authorId
           in: path
-          description: ID of author to delete
+          description: Delete an author by ID
           required: true
           schema:
             type: integer
@@ -235,16 +209,34 @@ paths:
       responses:
         '204':
           description: Author deleted successfully
-        '400':
-          description: Invalid ID supplied
-        '404':
-          description: Author not found
         default:
-          description: Unexpected error
+          $ref: "#/components/responses/UnexpectedError"
+
+    put:
+      tags:
+        - author
+      summary: Update an existing author
+      operationId: updateAuthor
+      requestBody:
+        description: Update an existing author
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AuthorUpdateRequest"
+        required: true
+      responses:
+        '200':
+          description: Author retrieved successfully
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/Author"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '404':
+          $ref: "#/components/responses/NotFound"
+        default:
+          $ref: "#/components/responses/UnexpectedError"
 
   /authors:
     get:
@@ -272,85 +264,67 @@ paths:
             example: 10
       responses:
         '200':
-          description: successful operation
+          description: List of authors retrieved successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PageAuthor'
+                $ref: "#/components/schemas/PageAuthor"
+        '400':
+          $ref: "#/components/responses/BadRequest"
         default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
+          $ref: "#/components/responses/UnexpectedError"
 
     post:
       tags:
         - author
       summary: Add a new author to the store.
-      operationId: addAuthor
+      operationId: createAuthor
       requestBody:
-        description: Create a new author in the store.
+        description: Create a new author
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Author'
+              $ref: "#/components/schemas/AuthorUpdateRequest"
         required: true
       responses:
-        '200':
-          description: Successful operation
+        '201':
+          description: Author created successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Author'
+                $ref: "#/components/schemas/Author"
         '400':
-          description: Invalid input
-        '422':
-          description: Validation exception
+          $ref: "#/components/responses/BadRequest"
         default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-
-    put:
-      tags:
-        - author
-      summary: Update an existing author.
-      operationId: updateAuthor
-      requestBody:
-        description: Update an existing author in the store
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Author'
-        required: true
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Author'
-        '400':
-          description: Invalid ID supplied
-        '404':
-          description: Author not found
-        '422':
-          description: Validation exception
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
+          $ref: "#/components/responses/UnexpectedError"
 
 components:
   securitySchemes:
     basicAuth:
       type: http
       scheme: basic
+
+  responses:
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            "$ref": "#/components/schemas/Error"
+
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            "$ref": "#/components/schemas/Error"
+
+    UnexpectedError:
+      description: Unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
 
   schemas:
     Book:
@@ -364,7 +338,25 @@ components:
         isAvailable:
           type: boolean
         author:
-          $ref: '#/components/schemas/Author'
+          $ref: "#/components/schemas/Author"
+
+    BookCreateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        isAvailable:
+          type: boolean
+
+    BookUpdateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        isAvailable:
+          type: boolean
+        authorId:
+          type: integer
 
     Author:
       type: object
@@ -372,6 +364,14 @@ components:
         id:
           type: integer
           format: int64
+        firstName:
+          type: string
+        lastName:
+          type: string
+
+    AuthorUpdateRequest:
+      type: object
+      properties:
         firstName:
           type: string
         lastName:
@@ -391,7 +391,7 @@ components:
         content:
           type: array
           items:
-            $ref: '#/components/schemas/Book'
+            $ref: "#/components/schemas/Book"
         totalElements:
           type: integer
         totalPages:
@@ -407,7 +407,7 @@ components:
         content:
           type: array
           items:
-            $ref: '#/components/schemas/Author'
+            $ref: "#/components/schemas/Author"
         totalElements:
           type: integer
         totalPages:
