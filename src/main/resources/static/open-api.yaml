@@ -80,6 +80,14 @@ paths:
         - book
       summary: Update an existing book
       operationId: updateBook
+      parameters:
+        - name: bookId
+          in: path
+          description: Update a book by ID
+          required: true
+          schema:
+            type: integer
+            format: int64
       requestBody:
         description: Update an existing book
         content:
@@ -174,7 +182,7 @@ paths:
       parameters:
         - name: authorId
           in: path
-          description: Retrieve a author by ID
+          description: Retrieve an author by ID
           required: true
           schema:
             type: integer
@@ -217,6 +225,14 @@ paths:
         - author
       summary: Update an existing author
       operationId: updateAuthor
+      parameters:
+        - name: authorId
+          in: path
+          description: Update an author by ID
+          required: true
+          schema:
+            type: integer
+            format: int64
       requestBody:
         description: Update an existing author
         content:
