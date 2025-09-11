@@ -13,7 +13,7 @@ info:
     - Update existing books or authors.
     - Delete books or authors.
 
-    Responses include standard HTTP status codes (200, 201, 204, 400, 404) and structured error messages.
+    Responses include standard HTTP status codes (200, 201, 204, 400, 401, 404) and structured error messages.
   version: 1.0.12
 servers:
   - url: http://localhost:8080
@@ -51,10 +51,10 @@ paths:
                 $ref: "#/components/schemas/Book"
         '400':
           $ref: "#/components/responses/BadRequest"
+        '401':
+          $ref: "#/components/responses/Unauthorized"
         '404':
           $ref: "#/components/responses/NotFound"
-        default:
-          $ref: "#/components/responses/UnexpectedError"
 
     delete:
       tags:
@@ -72,8 +72,8 @@ paths:
       responses:
         '204':
           description: Book deleted successfully
-        default:
-          $ref: "#/components/responses/UnexpectedError"
+        '401':
+          $ref: "#/components/responses/Unauthorized"
 
     put:
       tags:
@@ -104,10 +104,10 @@ paths:
                 $ref: "#/components/schemas/Book"
         '400':
           $ref: "#/components/responses/BadRequest"
+        '401':
+          $ref: "#/components/responses/Unauthorized"
         '404':
           $ref: "#/components/responses/NotFound"
-        default:
-          $ref: "#/components/responses/UnexpectedError"
 
   /books:
     get:
@@ -142,8 +142,8 @@ paths:
                 $ref: "#/components/schemas/PageBook"
         '400':
             $ref: "#/components/responses/BadRequest"
-        default:
-            $ref: "#/components/responses/UnexpectedError"
+        '401':
+          $ref: "#/components/responses/Unauthorized"
 
   /authors/{id}/books:
     post:
@@ -167,10 +167,10 @@ paths:
                 $ref: "#/components/schemas/Book"
         '400':
           $ref: "#/components/responses/BadRequest"
+        '401':
+          $ref: "#/components/responses/Unauthorized"
         '404':
           $ref: "#/components/responses/NotFound"
-        default:
-          $ref: "#/components/responses/UnexpectedError"
 
 
   /authors/{id}:
@@ -196,10 +196,10 @@ paths:
                 $ref: "#/components/schemas/Author"
         '400':
           $ref: "#/components/responses/BadRequest"
+        '401':
+          $ref: "#/components/responses/Unauthorized"
         '404':
           $ref: "#/components/responses/NotFound"
-        default:
-          $ref: "#/components/responses/UnexpectedError"
 
     delete:
       tags:
@@ -217,8 +217,8 @@ paths:
       responses:
         '204':
           description: Author deleted successfully
-        default:
-          $ref: "#/components/responses/UnexpectedError"
+        '401':
+          $ref: "#/components/responses/Unauthorized"
 
     put:
       tags:
@@ -249,10 +249,10 @@ paths:
                 $ref: "#/components/schemas/Author"
         '400':
           $ref: "#/components/responses/BadRequest"
+        '401':
+          $ref: "#/components/responses/Unauthorized"
         '404':
           $ref: "#/components/responses/NotFound"
-        default:
-          $ref: "#/components/responses/UnexpectedError"
 
   /authors:
     get:
@@ -287,8 +287,8 @@ paths:
                 $ref: "#/components/schemas/PageAuthor"
         '400':
           $ref: "#/components/responses/BadRequest"
-        default:
-          $ref: "#/components/responses/UnexpectedError"
+        '401':
+          $ref: "#/components/responses/Unauthorized"
 
     post:
       tags:
@@ -311,8 +311,8 @@ paths:
                 $ref: "#/components/schemas/Author"
         '400':
           $ref: "#/components/responses/BadRequest"
-        default:
-          $ref: "#/components/responses/UnexpectedError"
+        '401':
+          $ref: "#/components/responses/Unauthorized"
 
 components:
   securitySchemes:
@@ -335,12 +335,12 @@ components:
           schema:
             "$ref": "#/components/schemas/Error"
 
-    UnexpectedError:
-      description: Unexpected error
+    Unauthorized:
+      description: Authorization information is missing or invalid
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Error"
+            "$ref": "#/components/schemas/Error"
 
   schemas:
     Book:
