@@ -148,7 +148,7 @@ paths:
   /authors/{id}/books:
     post:
       tags:
-        - author
+        - book
       summary: Add a new book for an author
       operationId: createBookForAuthor
       requestBody:
