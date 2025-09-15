@@ -151,6 +151,14 @@ paths:
         - book
       summary: Add a new book for an author
       operationId: createBookForAuthor
+      parameters:
+        - name: authorId
+          in: path
+          description: ID of the existing author
+          required: true
+          schema:
+            type: integer
+            format: int64
       requestBody:
         description: Create a new book for the given author
         content:
