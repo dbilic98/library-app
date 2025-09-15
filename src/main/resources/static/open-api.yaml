@@ -93,7 +93,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/BookUpdateRequest"
+              $ref: "#/components/schemas/BookRequest"
         required: true
       responses:
         '200':
@@ -164,7 +164,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/BookCreateRequest"
+              $ref: "#/components/schemas/BookRequest"
         required: true
       responses:
         '201':
@@ -364,23 +364,13 @@ components:
         author:
           $ref: "#/components/schemas/Author"
 
-    BookCreateRequest:
+    BookRequest:
       type: object
       properties:
         name:
           type: string
         isAvailable:
           type: boolean
-
-    BookUpdateRequest:
-      type: object
-      properties:
-        name:
-          type: string
-        isAvailable:
-          type: boolean
-        authorId:
-          type: integer
 
     Author:
       type: object
