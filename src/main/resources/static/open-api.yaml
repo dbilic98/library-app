@@ -27,7 +27,7 @@ tags:
     description: CRUD operations for authors
 
 paths:
-  /books/{id}:
+  /books/{bookId}:
     get:
       tags:
         - book
@@ -140,11 +140,11 @@ paths:
               schema:
                 $ref: "#/components/schemas/PageBook"
         '400':
-            $ref: "#/components/responses/BadRequest"
+          $ref: "#/components/responses/BadRequest"
         '401':
           $ref: "#/components/responses/Unauthorized"
 
-  /authors/{id}/books:
+  /authors/{authorId}/books:
     post:
       tags:
         - book
@@ -180,7 +180,7 @@ paths:
           $ref: "#/components/responses/NotFound"
 
 
-  /authors/{id}:
+  /authors/{authorId}:
     get:
       tags:
         - author
