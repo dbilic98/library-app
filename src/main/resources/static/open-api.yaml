@@ -1,0 +1,431 @@
+openapi: 3.0.4
+info:
+  title: Library-App API - Books & Authors
+  description: |-
+    The Library-App API allows CRUD operations on authors and books.
+    All endpoints require basic authentication, and the API is defined according to the OpenAPI 3.0 specification.
+
+    **Key features:**
+    - Retrieve a book or author by ID.
+    - Retrieve a list of books or authors with pagination.
+    - Add new books or authors.
+    - Update existing books or authors.
+    - Delete books or authors.
+
+    Responses include standard HTTP status codes (200, 201, 204, 400, 401, 404) and error messages.
+  version: 1.0.12
+servers:
+  - url: http://localhost:8080
+
+security:
+  - basicAuth: []
+
+tags:
+  - name: book
+    description: CRUD operations for books
+  - name: author
+    description: CRUD operations for authors
+
+paths:
+  /books/{bookId}:
+    get:
+      tags:
+        - book
+      summary: Find book by ID
+      operationId: getBookById
+      parameters:
+        - name: bookId
+          in: path
+          description: Retrieve a book by ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Book retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Book"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '401':
+          $ref: "#/components/responses/Unauthorized"
+        '404':
+          $ref: "#/components/responses/NotFound"
+
+    delete:
+      tags:
+        - book
+      summary: Delete a book by ID
+      operationId: deleteBook
+      parameters:
+        - name: bookId
+          in: path
+          description: Delete a book by ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Book deleted successfully
+        '401':
+          $ref: "#/components/responses/Unauthorized"
+
+    put:
+      tags:
+        - book
+      summary: Update an existing book
+      operationId: updateBook
+      parameters:
+        - name: bookId
+          in: path
+          description: Update a book by ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Update an existing book
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BookRequest"
+        required: true
+      responses:
+        '200':
+          description: Book retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Book"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '401':
+          $ref: "#/components/responses/Unauthorized"
+        '404':
+          $ref: "#/components/responses/NotFound"
+
+  /books:
+    get:
+      tags:
+        - book
+      summary: Get all books with pagination
+      operationId: getAllBooks
+      parameters:
+        - name: page
+          in: query
+          description: Page number
+          required: true
+          schema:
+            type: integer
+            minimum: 0
+            example: 0
+        - name: size
+          in: query
+          description: Number of items per page
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 10
+            example: 10
+      responses:
+        '200':
+          description: List of books retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PageBook"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '401':
+          $ref: "#/components/responses/Unauthorized"
+
+  /authors/{authorId}/books:
+    post:
+      tags:
+        - book
+      summary: Add a new book for an author
+      operationId: createBookForAuthor
+      parameters:
+        - name: authorId
+          in: path
+          description: ID of the existing author
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Create a new book for the given author
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BookRequest"
+        required: true
+      responses:
+        '201':
+          description: Book created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Book"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '401':
+          $ref: "#/components/responses/Unauthorized"
+        '404':
+          $ref: "#/components/responses/NotFound"
+
+
+  /authors/{authorId}:
+    get:
+      tags:
+        - author
+      summary: Find author by ID
+      operationId: getAuthorById
+      parameters:
+        - name: authorId
+          in: path
+          description: Retrieve an author by ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Author retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Author"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '401':
+          $ref: "#/components/responses/Unauthorized"
+        '404':
+          $ref: "#/components/responses/NotFound"
+
+    delete:
+      tags:
+        - author
+      summary: Delete an author by ID
+      operationId: deleteAuthor
+      parameters:
+        - name: authorId
+          in: path
+          description: Delete an author by ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Author deleted successfully
+        '401':
+          $ref: "#/components/responses/Unauthorized"
+
+    put:
+      tags:
+        - author
+      summary: Update an existing author
+      operationId: updateAuthor
+      parameters:
+        - name: authorId
+          in: path
+          description: Update an author by ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Update an existing author
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AuthorRequest"
+        required: true
+      responses:
+        '200':
+          description: Author retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Author"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '401':
+          $ref: "#/components/responses/Unauthorized"
+        '404':
+          $ref: "#/components/responses/NotFound"
+
+  /authors:
+    get:
+      tags:
+        - author
+      summary: Get all authors with pagination
+      operationId: getAllAuthors
+      parameters:
+        - name: page
+          in: query
+          description: Page number
+          required: true
+          schema:
+            type: integer
+            minimum: 0
+            example: 0
+        - name: size
+          in: query
+          description: Number of items per page
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 10
+            example: 10
+      responses:
+        '200':
+          description: List of authors retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PageAuthor"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '401':
+          $ref: "#/components/responses/Unauthorized"
+
+    post:
+      tags:
+        - author
+      summary: Add a new author to the store.
+      operationId: createAuthor
+      requestBody:
+        description: Create a new author
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AuthorRequest"
+        required: true
+      responses:
+        '201':
+          description: Author created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Author"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '401':
+          $ref: "#/components/responses/Unauthorized"
+
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+
+  responses:
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            "$ref": "#/components/schemas/Error"
+
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            "$ref": "#/components/schemas/Error"
+
+    Unauthorized:
+      description: Authorization information is missing or invalid
+      content:
+        application/json:
+          schema:
+            "$ref": "#/components/schemas/Error"
+
+  schemas:
+    Book:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        isAvailable:
+          type: boolean
+        author:
+          $ref: "#/components/schemas/Author"
+
+    BookRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        isAvailable:
+          type: boolean
+
+    Author:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        firstName:
+          type: string
+        lastName:
+          type: string
+
+    AuthorRequest:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+
+    PageBook:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: "#/components/schemas/Book"
+        totalElements:
+          type: integer
+        totalPages:
+          type: integer
+        page:
+          type: integer
+        size:
+          type: integer
+
+    PageAuthor:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: "#/components/schemas/Author"
+        totalElements:
+          type: integer
+        totalPages:
+          type: integer
+        page:
+          type: integer
+        size:
+          type: integer
