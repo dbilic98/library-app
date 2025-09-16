@@ -245,7 +245,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/AuthorUpdateRequest"
+              $ref: "#/components/schemas/AuthorRequest"
         required: true
       responses:
         '200':
@@ -307,7 +307,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/AuthorUpdateRequest"
+              $ref: "#/components/schemas/AuthorRequest"
         required: true
       responses:
         '201':
@@ -382,7 +382,7 @@ components:
         lastName:
           type: string
 
-    AuthorUpdateRequest:
+    AuthorRequest:
       type: object
       properties:
         firstName:
