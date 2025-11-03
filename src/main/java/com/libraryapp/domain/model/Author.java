@@ -33,10 +33,15 @@ public class Author {
     if (firstName.length() < 3) {
       throw new IllegalArgumentException("firstName must be at least 3 characters");
     }
-    if (lastName.length() < 3) {
+    if (lastName.length() < 4) {
       throw new IllegalArgumentException("lastName must be at least 3 characters");
     }
     this.id = id;
+    this.firstName = firstName;
+    this.lastName = lastName;
+  }
+
+  public Author(String firstName, String lastName) {
     this.firstName = firstName;
     this.lastName = lastName;
   }
