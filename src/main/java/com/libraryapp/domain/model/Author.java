@@ -34,7 +34,7 @@ public class Author {
       throw new IllegalArgumentException("firstName must be at least 3 characters");
     }
     if (lastName.length() < 4) {
-      throw new IllegalArgumentException("lastName must be at least 3 characters");
+      throw new IllegalArgumentException("lastName must be at least 4 characters");
     }
     this.id = id;
     this.firstName = firstName;
