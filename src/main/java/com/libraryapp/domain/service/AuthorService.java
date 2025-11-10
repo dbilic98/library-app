@@ -19,7 +19,7 @@ public class AuthorService {
 
   public Author findAuthorById(Long id) {
     return authorRepository.findById(id)
-        .orElseThrow(() -> new RuntimeException("Author with ID " + id + "is not found"));
+        .orElseThrow(() -> new RuntimeException("Author with ID " + id + " is not found"));
   }
 
   public Page<Author> findAllAuthors(int pageNumber, int pageSize) {
@@ -42,9 +42,9 @@ public class AuthorService {
   public void deleteAuthor(Long id) {
     if (authorRepository.existsById(id)) {
       authorRepository.deleteById(id);
-    } else {
-      throw new RuntimeException("Author with ID " + id + "is not found");
+      return;
     }
+    throw new RuntimeException("Author with ID " + id + " is not found");
   }
 }
 
