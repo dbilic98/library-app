@@ -5,7 +5,7 @@
 - **Java**
 - **Spring Boot**
 - **Hibernate ORM**
-- **Swagger**
+- **Swagger/OpenAPI**
 - **MySQL**
 - **Maven**
 - **Flyway**
