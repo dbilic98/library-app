@@ -34,8 +34,10 @@ public class AuthorService {
 
   public Author updateAuthor(Long id, RequestAuthorDto requestAuthorDto) {
     Author authorToUpdate = findAuthorById(id);
-    authorToUpdate.setFirstName(requestAuthorDto.firstName());
-    authorToUpdate.setLastName(requestAuthorDto.lastName());
+    authorToUpdate.setFirstName(requestAuthorDto.firstName() != null ? requestAuthorDto.firstName()
+        : authorToUpdate.getFirstName());
+    authorToUpdate.setLastName(requestAuthorDto.lastName() != null ? requestAuthorDto.lastName()
+        : authorToUpdate.getLastName());
     return authorRepository.save(authorToUpdate);
   }
 
