@@ -227,21 +227,21 @@ paths:
         '401':
           $ref: "#/components/responses/Unauthorized"
 
-    put:
+    patch:
       tags:
         - author
-      summary: Update an existing author
-      operationId: updateAuthor
+      summary: Partially update an existing author
+      operationId: patchAuthor
       parameters:
         - name: authorId
           in: path
-          description: Update an author by ID
+          description: Partially update an author by ID
           required: true
           schema:
             type: integer
             format: int64
       requestBody:
-        description: Update an existing author
+        description: Fields to update an existing author
         content:
           application/json:
             schema:
@@ -249,7 +249,7 @@ paths:
         required: true
       responses:
         '200':
-          description: Author retrieved successfully
+          description: Author updated successfully
           content:
             application/json:
               schema:
