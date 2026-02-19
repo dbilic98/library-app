@@ -3,6 +3,7 @@ package com.libraryapp.domain.service;
 import com.libraryapp.controller.request.RequestAuthorDto;
 import com.libraryapp.domain.model.Author;
 import com.libraryapp.domain.repository.AuthorRepository;
+import com.libraryapp.exception.AuthorNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -19,7 +20,7 @@ public class AuthorService {
 
   public Author findAuthorById(Long id) {
     return authorRepository.findById(id)
-        .orElseThrow(() -> new RuntimeException("Author with ID " + id + " is not found"));
+        .orElseThrow(() -> new AuthorNotFoundException("Author with ID " + id + " is not found"));
   }
 
   public Page<Author> findAllAuthors(int pageNumber, int pageSize) {
@@ -46,9 +47,7 @@ public class AuthorService {
       authorRepository.deleteById(id);
       return;
     }
-    throw new RuntimeException("Author with ID " + id + " is not found");
+    throw new AuthorNotFoundException("Author with ID " + id + " is not found");
   }
 }
-
-
 
