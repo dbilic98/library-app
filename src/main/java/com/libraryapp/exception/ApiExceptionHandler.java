@@ -4,6 +4,7 @@ import com.libraryapp.exception.response.ErrorCodes;
 import com.libraryapp.exception.response.ErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
 import org.jspecify.annotations.NonNull;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -15,12 +16,14 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+@Slf4j
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
   @ExceptionHandler(AuthorNotFoundException.class)
   public ResponseEntity<ErrorResponse> handleNotFoundException(AuthorNotFoundException e,
       HttpServletRequest request) {
+    log.warn("Author not found exception, message: {}", e.getMessage());
     return buildErrorResponse("Author error", ErrorCodes.AUTHOR_NOT_FOUND.getCode(),
         HttpStatus.NOT_FOUND,
         e.getMessage(), request);
@@ -35,12 +38,12 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
   @Override
   protected ResponseEntity<Object> handleMethodArgumentNotValid(
-      @NonNull MethodArgumentNotValidException e,
+      @NonNull MethodArgumentNotValidException ex,
       @NonNull HttpHeaders headers,
       @NonNull HttpStatusCode status,
       @NonNull WebRequest request) {
 
-    String errors = e.getBindingResult()
+    String errors = ex.getBindingResult()
         .getFieldErrors()
         .stream()
         .map(err -> err.getField() + ": " + err.getDefaultMessage())
