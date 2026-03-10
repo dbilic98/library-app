@@ -180,7 +180,7 @@ paths:
           $ref: "#/components/responses/NotFound"
 
 
-  /authors/{authorId}:
+  /api/authors/{authorId}:
     get:
       tags:
         - author
@@ -261,7 +261,7 @@ paths:
         '404':
           $ref: "#/components/responses/NotFound"
 
-  /authors:
+  /api/authors:
     get:
       tags:
         - author
