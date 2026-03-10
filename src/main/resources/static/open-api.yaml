@@ -1,4 +1,4 @@
-openapi: 3.0.4
+openapi: 3.0.3
 info:
   title: Library-App API - Books & Authors
   description: |-
@@ -27,7 +27,7 @@ tags:
     description: CRUD operations for authors
 
 paths:
-  /books/{bookId}:
+  /api/books/{bookId}:
     get:
       tags:
         - book
@@ -108,7 +108,7 @@ paths:
         '404':
           $ref: "#/components/responses/NotFound"
 
-  /books:
+  /api/books:
     get:
       tags:
         - book
@@ -144,7 +144,7 @@ paths:
         '401':
           $ref: "#/components/responses/Unauthorized"
 
-  /authors/{authorId}/books:
+  /api/books/authors/{authorId}:
     post:
       tags:
         - book

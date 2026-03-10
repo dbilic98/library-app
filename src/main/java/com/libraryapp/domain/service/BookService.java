@@ -1,5 +1,7 @@
 package com.libraryapp.domain.service;
 
+import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
+
 import com.libraryapp.controller.request.CreateBookDto;
 import com.libraryapp.controller.request.UpdateBookDto;
 import com.libraryapp.domain.model.Author;
@@ -27,31 +29,31 @@ public class BookService {
 
   public Book findBookById(Long id) {
     return bookRepository.findById(id)
-        .orElseThrow(() -> new BookNotFoundException("Book with ID" + id + " is not found"));
+        .orElseThrow(() -> new BookNotFoundException("Book with ID " + id + " is not found"));
   }
 
-  public Page<Book> findAllBook(int pageNumber, int pageSize) {
+  public Page<Book> findAllBooks(int pageNumber, int pageSize) {
     Pageable pageable = PageRequest.of(pageNumber, pageSize);
     return bookRepository.findAll(pageable);
   }
 
-  public Book createBook(CreateBookDto createBookDto) {
-    Author findAuthor = authorRepository.findById(createBookDto.authorId())
-        .orElseThrow(() -> new AuthorNotFoundException("Author not found"));
-    Book createdBook = new Book(createBookDto.name(), createBookDto.isAvailable(), findAuthor);
+  public Book createBook(Long authorId, CreateBookDto createBookDto) {
+    Author foundAuthor = authorRepository.findById(authorId)
+        .orElseThrow(() -> new AuthorNotFoundException("Author with ID " + id + "is not found"));
+    Book createdBook = new Book(createBookDto.name(), createBookDto.isAvailable(), foundAuthor);
     return bookRepository.save(createdBook);
   }
 
   public Book updateBook(Long id, UpdateBookDto updateBookDto) {
-    Book updateToBook = bookRepository.findById(id)
-        .orElseThrow(() -> new BookNotFoundException("Book not found"));
+    Book bookToUpdate = bookRepository.findById(id)
+        .orElseThrow(() -> new BookNotFoundException("Book with ID " + id + " is not found"));
     if (updateBookDto.name() != null) {
-      updateToBook.setName(updateBookDto.name());
+      bookToUpdate.setName(updateBookDto.name());
     }
     if (updateBookDto.isAvailable() != null) {
-      updateToBook.setAvailable(updateBookDto.isAvailable());
+      bookToUpdate.setAvailable(updateBookDto.isAvailable());
     }
-    return bookRepository.save(updateToBook);
+    return bookRepository.save(bookToUpdate);
   }
 
   public void deleteBook(Long id) {
@@ -59,6 +61,6 @@ public class BookService {
       bookRepository.deleteById(id);
       return;
     }
-    throw new BookNotFoundException("Book with ID" + id + " is not found");
+    throw new BookNotFoundException("Book with ID " + id + " is not found");
   }
 }

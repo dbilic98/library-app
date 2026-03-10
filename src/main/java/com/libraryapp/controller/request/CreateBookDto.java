@@ -11,11 +11,7 @@ public record CreateBookDto(
     String name,
 
     @NotNull(message = "Availability must be provided")
-    Boolean isAvailable,
-
-    @NotNull(message = "Author is required")
-    Long authorId
-
+    Boolean isAvailable
 ) {
 
 }

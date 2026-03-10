@@ -42,9 +42,9 @@ public class BookController {
             book.getAuthor().getLastName()));
   }
 
-  @GetMapping("/{booksId}")
+  @GetMapping("/{bookId}")
   @ResponseStatus(HttpStatus.OK)
-  public ResponseBookDto findBookById(@PathVariable("booksId") Long id) {
+  public ResponseBookDto findBookById(@PathVariable("bookId") Long id) {
     Book book = bookService.findBookById(id);
     return toResponseDto(book);
   }
@@ -54,29 +54,30 @@ public class BookController {
   public PaginatedResponse<ResponseBookDto> getPaginatedBooks(
       @RequestParam(defaultValue = "0") int pageNumber,
       @RequestParam(defaultValue = "10") int pageSize) {
-    Page<Book> booksPage = bookService.findAllBook(pageNumber, pageSize);
+    Page<Book> booksPage = bookService.findAllBooks(pageNumber, pageSize);
     Page<ResponseBookDto> bookDtoPage = booksPage.map(this::toResponseDto);
     return new PaginatedResponse<>(bookDtoPage);
   }
 
-  @PostMapping
+  @PostMapping("/authors/{authorId}")
   @ResponseStatus(HttpStatus.CREATED)
-  public ResponseBookDto createBook(@Valid @RequestBody CreateBookDto createBookDto) {
-    Book createdBook = bookService.createBook(createBookDto);
+  public ResponseBookDto createBook(@PathVariable Long authorId,
+      @Valid @RequestBody CreateBookDto createBookDto) {
+    Book createdBook = bookService.createBook(authorId, createBookDto);
     return toResponseDto(createdBook);
   }
 
-  @PatchMapping("/{booksId}")
+  @PatchMapping("/{bookId}")
   @ResponseStatus(HttpStatus.OK)
-  public ResponseBookDto updateBook(@PathVariable("booksId") Long id,
+  public ResponseBookDto updateBook(@PathVariable("bookId") Long id,
       @Valid @RequestBody UpdateBookDto updateBookDto) {
     Book updatedBook = bookService.updateBook(id, updateBookDto);
     return toResponseDto(updatedBook);
   }
 
-  @DeleteMapping("/{booksId}")
+  @DeleteMapping("/{bookId}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void deleteBook(@PathVariable("booksId") Long id) {
+  public void deleteBook(@PathVariable("bookId") Long id) {
     bookService.deleteBook(id);
   }
 }

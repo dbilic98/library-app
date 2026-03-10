@@ -21,10 +21,19 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
   @ExceptionHandler(AuthorNotFoundException.class)
-  public ResponseEntity<ErrorResponse> handleNotFoundException(AuthorNotFoundException e,
+  public ResponseEntity<ErrorResponse> handleAuthorNotFoundException(AuthorNotFoundException e,
       HttpServletRequest request) {
     log.warn("Author not found exception, message: {}", e.getMessage());
     return buildErrorResponse("Author error", ErrorCodes.AUTHOR_NOT_FOUND.getCode(),
+        HttpStatus.NOT_FOUND,
+        e.getMessage(), request);
+  }
+
+  @ExceptionHandler(BookNotFoundException.class)
+  public ResponseEntity<ErrorResponse> handleBookNotFoundException(BookNotFoundException e,
+      HttpServletRequest request) {
+    log.warn("Book bot found exception, message: {}", e.getMessage());
+    return buildErrorResponse("Book error", ErrorCodes.BOOK_NOT_FOUND.getCode(),
         HttpStatus.NOT_FOUND,
         e.getMessage(), request);
   }
