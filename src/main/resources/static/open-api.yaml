@@ -1,4 +1,4 @@
-openapi: 3.0.4
+openapi: 3.0.3
 info:
   title: Library-App API - Books & Authors
   description: |-
@@ -74,29 +74,29 @@ paths:
         '401':
           $ref: "#/components/responses/Unauthorized"
 
-    put:
+    patch:
       tags:
         - book
-      summary: Update an existing book
-      operationId: updateBook
+      summary: Partially update an existing book
+      operationId: patchBook
       parameters:
         - name: bookId
           in: path
-          description: Update a book by ID
+          description: Partially update a book by ID
           required: true
           schema:
             type: integer
             format: int64
       requestBody:
-        description: Update an existing book
+        description: Fields to update an existing book
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/BookRequest"
+              $ref: "#/components/schemas/UpdateBookRequest"
         required: true
       responses:
         '200':
-          description: Book retrieved successfully
+          description: Book updated successfully
           content:
             application/json:
               schema:
@@ -163,7 +163,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/BookRequest"
+              $ref: "#/components/schemas/CreateBookRequest"
         required: true
       responses:
         '201':
@@ -180,7 +180,7 @@ paths:
           $ref: "#/components/responses/NotFound"
 
 
-  /authors/{authorId}:
+  /api/authors/{authorId}:
     get:
       tags:
         - author
@@ -261,7 +261,7 @@ paths:
         '404':
           $ref: "#/components/responses/NotFound"
 
-  /authors:
+  /api/authors:
     get:
       tags:
         - author
@@ -300,7 +300,7 @@ paths:
     post:
       tags:
         - author
-      summary: Add a new author to the store.
+      summary: Add a new author to the store
       operationId: createAuthor
       requestBody:
         description: Create a new author
@@ -363,7 +363,18 @@ components:
         author:
           $ref: "#/components/schemas/Author"
 
-    BookRequest:
+    CreateBookRequest:
+      type: object
+      required:
+        - name
+        - isAvailable
+      properties:
+        name:
+          type: string
+        isAvailable:
+          type: boolean
+
+    UpdateBookRequest:
       type: object
       properties:
         name:
