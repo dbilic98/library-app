@@ -39,7 +39,7 @@ public class BookService {
 
   public Book createBook(Long authorId, CreateBookDto createBookDto) {
     Author foundAuthor = authorRepository.findById(authorId)
-        .orElseThrow(() -> new AuthorNotFoundException("Author with ID " + id + "is not found"));
+        .orElseThrow(() -> new AuthorNotFoundException("Author with ID " + id + " is not found"));
     Book createdBook = new Book(createBookDto.name(), createBookDto.isAvailable(), foundAuthor);
     return bookRepository.save(createdBook);
   }
