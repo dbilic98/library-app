@@ -9,7 +9,6 @@ public enum ErrorCodes {
 
   //Author error 21xx
   AUTHOR_NOT_FOUND(2100, "Author not found"),
-
   USER_ALREADY_EXISTS(2102, "User already exists"),
 
   //Validation 40xx
