@@ -4,8 +4,6 @@ import com.libraryapp.controller.request.RequestUserDto;
 import com.libraryapp.domain.model.User;
 import com.libraryapp.domain.repository.UserRepository;
 import com.libraryapp.exception.UserAlreadyExistsException;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -40,9 +38,5 @@ public class UserService implements UserDetailsService {
         passwordEncoder.encode(requestUserDto.password()));
 
     return userRepository.save(createdUser);
-  }
-
-  public void readFile(String path) throws FileNotFoundException {
-    FileReader fileName = new FileReader(path);
   }
 }
