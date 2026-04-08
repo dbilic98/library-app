@@ -25,52 +25,42 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
       HttpServletRequest request) {
     log.warn("Author not found exception, message: {}", e.getMessage());
     return buildErrorResponse("Author error", ErrorCodes.AUTHOR_NOT_FOUND.getCode(),
-        HttpStatus.NOT_FOUND,
-        e.getMessage(), request);
+        HttpStatus.NOT_FOUND, e.getMessage(), request);
+  }
+
+  @ExceptionHandler(UserAlreadyExistsException.class)
+  public ResponseEntity<ErrorResponse> handleUserAlreadyExistsException(
+      UserAlreadyExistsException e, HttpServletRequest request) {
+    log.warn("User already exists exception, message: {}", e.getMessage());
+    return buildErrorResponse("User error", ErrorCodes.USER_ALREADY_EXISTS.getCode(),
+        HttpStatus.CONFLICT, e.getMessage(), request);
   }
 
   @ExceptionHandler(Exception.class)
   public ResponseEntity<ErrorResponse> handleGeneric(Exception e, HttpServletRequest request) {
     return buildErrorResponse("Internal server error", ErrorCodes.INTERNAL_ERROR.getCode(),
-        HttpStatus.INTERNAL_SERVER_ERROR,
-        e.getMessage(), request);
+        HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), request);
   }
 
   @Override
   protected ResponseEntity<Object> handleMethodArgumentNotValid(
-      @NonNull MethodArgumentNotValidException ex,
-      @NonNull HttpHeaders headers,
-      @NonNull HttpStatusCode status,
-      @NonNull WebRequest request) {
+      @NonNull MethodArgumentNotValidException ex, @NonNull HttpHeaders headers,
+      @NonNull HttpStatusCode status, @NonNull WebRequest request) {
 
-    String errors = ex.getBindingResult()
-        .getFieldErrors()
-        .stream()
+    String errors = ex.getBindingResult().getFieldErrors().stream()
         .map(err -> err.getField() + ": " + err.getDefaultMessage())
         .collect(Collectors.joining(", "));
 
-    ErrorResponse errorResponse = new ErrorResponse(
-        HttpStatus.BAD_REQUEST.value(),
-        "Validation error",
-        ErrorCodes.INVALID_FORMAT.getCode(),
-        "Request body is invalid",
-        errors);
+    ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST.value(),
+        "Validation error", ErrorCodes.INVALID_FORMAT.getCode(), "Request body is invalid", errors);
 
     return ResponseEntity.badRequest().body(errorResponse);
   }
 
-  private ResponseEntity<ErrorResponse> buildErrorResponse(
-      String errorType,
-      int errorCode,
-      HttpStatus status,
-      String message,
-      HttpServletRequest request) {
+  private ResponseEntity<ErrorResponse> buildErrorResponse(String errorType, int errorCode,
+      HttpStatus status, String message, HttpServletRequest request) {
 
-    ErrorResponse errorResponse = new ErrorResponse(
-        status.value(),
-        errorType,
-        errorCode,
-        message,
+    ErrorResponse errorResponse = new ErrorResponse(status.value(), errorType, errorCode, message,
         request.getRequestURI());
 
     return ResponseEntity.status(status).body(errorResponse);
