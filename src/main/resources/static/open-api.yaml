@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: Library-App API
   description: |-
-    API for managing a library system (authors, books, users).
+    API for managing a library system.
     All endpoints require basic authentication, except user registration.
 
     **Key features:**
