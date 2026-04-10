@@ -1,8 +1,8 @@
 openapi: 3.0.3
 info:
-  title: Library-App API - Books, Authors & Users
+  title: Library-App API
   description: |-
-    The Library-App API allows CRUD operations on authors, books and users.
+    API for managing a library system (authors, books, users).
     All endpoints require basic authentication, except user registration.
 
     **Key features:**
@@ -14,7 +14,7 @@ info:
     - Register new users.
 
     Responses include standard HTTP status codes (200, 201, 204, 400, 401, 404) and error messages.
-  version: 1.0.12
+  version: 1.0.13
 servers:
   - url: http://localhost:8080
 
