@@ -1,7 +1,5 @@
 package com.libraryapp.domain.service;
 
-import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
-
 import com.libraryapp.controller.request.CreateBookDto;
 import com.libraryapp.controller.request.UpdateBookDto;
 import com.libraryapp.domain.model.Author;
@@ -37,8 +35,8 @@ public class BookService {
     return bookRepository.findAll(pageable);
   }
 
-  public Book createBook(Long authorId, CreateBookDto createBookDto) {
-    Author foundAuthor = authorRepository.findById(authorId)
+  public Book createBook(Long id, CreateBookDto createBookDto) {
+    Author foundAuthor = authorRepository.findById(id)
         .orElseThrow(() -> new AuthorNotFoundException("Author with ID " + id + " is not found"));
     Book createdBook = new Book(createBookDto.name(), createBookDto.isAvailable(), foundAuthor);
     return bookRepository.save(createdBook);
