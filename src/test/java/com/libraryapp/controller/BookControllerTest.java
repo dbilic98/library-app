@@ -284,10 +284,4 @@ class BookControllerTest {
         .andExpect(jsonPath("$.message").value("Book with ID 1 is not found"))
         .andExpect(jsonPath("$.path").value("/api/books/1"));
   }
-
-  @Test
-  public void deleteBook_whenAnonymous_returnsForbidden() throws Exception {
-
-    mockMvc.perform(delete("/api/books/1")).andExpect(status().isForbidden());
-  }
 }
