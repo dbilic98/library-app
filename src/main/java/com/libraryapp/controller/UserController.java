@@ -5,9 +5,11 @@ import com.libraryapp.controller.response.ResponseUserDto;
 import com.libraryapp.domain.model.User;
 import com.libraryapp.domain.service.UserService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -21,6 +23,7 @@ public class UserController {
   }
 
   @PostMapping
+  @ResponseStatus(HttpStatus.CREATED)
   public ResponseUserDto createUser(@Valid @RequestBody RequestUserDto requestUserDto) {
     User createdUser = userService.createUser(requestUserDto);
     return new ResponseUserDto(
