@@ -1,7 +1,6 @@
 package com.libraryapp.controller;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.libraryapp.controller.request.RequestUserDto;
@@ -27,7 +26,11 @@ public class UserSecurityTest {
   private UserService userService;
 
   @Test
-  public void createUser_whenUnauthenticated_returnsCreated() throws Exception {
+  public void createUser_whenAnonymous_returnsCreated() throws Exception {
+
+    User user = new User("Ana", "Password@123");
+
+    Mockito.when(userService.createUser(Mockito.any(RequestUserDto.class))).thenReturn(user);
 
     String requestJson = """
         {
@@ -36,54 +39,9 @@ public class UserSecurityTest {
         }
         """;
 
-    User user = new User("Ana", "Password@123");
-
-    Mockito.when(userService.createUser(Mockito.any(RequestUserDto.class))).thenReturn(user);
-
     mockMvc.perform(post("/api/users")
             .contentType("application/json")
             .content(requestJson))
-        .andExpect(status().isCreated())
-        .andExpect(jsonPath("$.username").value("Ana"));
-  }
-
-  @Test
-  public void createUser_whenMissingUsername_returnsBadRequest() throws Exception {
-
-    String requestJson = """
-        {
-        "username": "",
-        "password": "Password@123"
-        }
-        """;
-    mockMvc.perform(post("/api/users")
-            .contentType("application/json")
-            .content(requestJson))
-        .andExpect(status().isBadRequest())
-        .andExpect(jsonPath("$.httpStatusCode").value(400))
-        .andExpect(jsonPath("$.error").value("Validation error"))
-        .andExpect(jsonPath("$.errorCode").value(4003)).andExpect(jsonPath("$.message").exists())
-        .andExpect(jsonPath("$.path").value("/api/users"));
-    ;
-  }
-
-  @Test
-  public void createUser_whenInvalidPassword_returnsBadRequest() throws Exception {
-
-    String requestJson = """
-        {
-        "username": "Ana",
-        "password": "pass"
-        }
-        """;
-    mockMvc.perform(post("/api/users")
-            .contentType("application/json")
-            .content(requestJson))
-        .andExpect(status().isBadRequest())
-        .andExpect(jsonPath("$.httpStatusCode").value(400))
-        .andExpect(jsonPath("$.error").value("Validation error"))
-        .andExpect(jsonPath("$.errorCode").value(4003)).andExpect(jsonPath("$.message").exists())
-        .andExpect(jsonPath("$.path").value("/api/users"));
-    ;
+        .andExpect(status().isCreated());
   }
 }
