@@ -45,10 +45,13 @@ class BookControllerTest {
   @Test
   @WithMockUser(username = "Ana", roles = "USER")
   public void getBookById_whenBookExists_returnsBook() throws Exception {
+
     Author author = new Author(1L, "Ana", "Anic");
     Book book = new Book("Bob", true, author);
     book.setId(1L);
+
     Mockito.when(bookService.findBookById(1L)).thenReturn(book);
+
     mockMvc.perform(get("/api/books/1").with(httpBasic("Ana", "password123")))
         .andExpect(status().isOk()).andExpect(jsonPath("$.id").value(1))
         .andExpect(jsonPath("$.name").value("Bob")).andExpect(jsonPath("$.isAvailable").value(true))
@@ -60,10 +63,12 @@ class BookControllerTest {
   @Test
   @WithMockUser(username = "Ana", roles = "USER")
   public void getBookById_whenBookDoesNotExist_returnsNotFound() throws Exception {
+
     BookNotFoundException bookNotFoundException = new BookNotFoundException(
         "Book with ID 1 is not found");
 
     Mockito.when(bookService.findBookById(1L)).thenThrow(bookNotFoundException);
+
     mockMvc.perform(get("/api/books/1").with(httpBasic("Ana", "password123")))
         .andExpect(status().isNotFound()).andExpect(jsonPath("$.httpStatusCode").value(404))
         .andExpect(jsonPath("$.error").value("Book error"))
@@ -75,12 +80,14 @@ class BookControllerTest {
   @Test
   @WithMockUser(username = "Ana", roles = "USER")
   public void getPaginatedBooks_returnsPageOfBooks() throws Exception {
+
     Author author = new Author(1L, "Ana", "Anic");
     Book book1 = new Book("Bob", true, author);
     Book book2 = new Book("Tob", true, author);
     Book book3 = new Book("Kob", true, author);
 
     List<Book> bookList = List.of(book1, book2, book3);
+
     Pageable pageable = PageRequest.of(0, 10);
     Page<Book> bookPage = new PageImpl<>(bookList, pageable, bookList.size());
 
@@ -114,18 +121,21 @@ class BookControllerTest {
   @Test
   @WithMockUser(username = "Ana", roles = "USER")
   public void createBook_whenValidRequest_returnsCreatedBook() throws Exception {
-    String requestJson = """
-        {
-          "name": "Nova knjiga",
-          "isAvailable": true
-        }
-        """;
+
     Author author = new Author(1L, "Ana", "Anic");
     Book savedBook = new Book("Nova knjiga", true, author);
     savedBook.setId(1L);
 
     Mockito.when(bookService.createBook(Mockito.anyLong(), Mockito.any(CreateBookDto.class)))
         .thenReturn(savedBook);
+
+    String requestJson = """
+        {
+          "name": "Nova knjiga",
+          "isAvailable": true
+        }
+        """;
+
     mockMvc.perform(post("/api/books/authors/1").with(httpBasic("Ana", "password123"))
             .contentType("application/json").content(requestJson)).andExpect(status().isCreated())
         .andExpect(jsonPath("$.id").value(1)).andExpect(jsonPath("$.name").value("Nova knjiga"))
@@ -183,19 +193,19 @@ class BookControllerTest {
   @WithMockUser(username = "Ana", roles = "USER")
   public void updateBook_whenValidPatchRequest_returnsUpdatedBook() throws Exception {
 
-    String requestJson = """
-        {
-        "name": "Knjiga",
-        "isAvailable": true
-        }
-        """;
-
     Author author = new Author(1L, "Ana", "Anic");
     Book updatedBook = new Book("Knjiga", true, author);
     updatedBook.setId(1L);
 
     Mockito.when(bookService.updateBook(Mockito.anyLong(), Mockito.any(UpdateBookDto.class)))
         .thenReturn(updatedBook);
+
+    String requestJson = """
+        {
+        "name": "Knjiga",
+        "isAvailable": true
+        }
+        """;
 
     mockMvc.perform(
             patch("/api/books/1").with(httpBasic("Ana", "password123")).contentType("application/json")
