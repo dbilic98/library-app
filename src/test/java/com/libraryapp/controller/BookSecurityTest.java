@@ -26,13 +26,13 @@ public class BookSecurityTest {
   private BookService bookService;
 
   @Test
-  public void getBook_whenAnonymous_returnsForbidden() throws Exception {
+  public void getBook_whenAnonymous_returnsUnauthorized() throws Exception {
     mockMvc.perform(get("/api/books/1"))
         .andExpect(status().isUnauthorized());
   }
 
   @Test
-  public void updateBook_whenAnonymous_returnsForbidden() throws Exception {
+  public void updateBook_whenAnonymous_returnsUnauthorized() throws Exception {
 
     String requestJson = """
         {
@@ -48,13 +48,13 @@ public class BookSecurityTest {
   }
 
   @Test
-  public void deleteBook_whenAnonymous_returnsForbidden() throws Exception {
+  public void deleteBook_whenAnonymous_returnsUnauthorized() throws Exception {
     mockMvc.perform(delete("/api/books/1"))
         .andExpect(status().isUnauthorized());
   }
 
   @Test
-  public void createBook_whenAnonymous_returnsForbidden() throws Exception {
+  public void createBook_whenAnonymous_returnsUnauthorized() throws Exception {
     String requestJson = """
         {
           "name": "Knjiga",
