@@ -1,12 +1,12 @@
-package com.libraryapp.controller;
+package com.libraryapp.security;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.libraryapp.controller.UserController;
 import com.libraryapp.controller.request.RequestUserDto;
 import com.libraryapp.domain.model.User;
 import com.libraryapp.domain.service.UserService;
-import com.libraryapp.security.SecurityConfig;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
