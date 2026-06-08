@@ -2,6 +2,7 @@ package com.libraryapp.controller;
 
 import com.libraryapp.controller.request.CreateBookDto;
 import com.libraryapp.controller.request.UpdateBookDto;
+import com.libraryapp.controller.response.AvailableBooksDto;
 import com.libraryapp.controller.response.PaginatedResponse;
 import com.libraryapp.controller.response.ResponseAuthorDto;
 import com.libraryapp.controller.response.ResponseBookDto;
@@ -79,5 +80,13 @@ public class BookController {
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void deleteBook(@PathVariable("bookId") Long id) {
     bookService.deleteBook(id);
+  }
+
+  @GetMapping("/available/count")
+  @ResponseStatus(HttpStatus.OK)
+  public AvailableBooksDto countAvailableBooks() {
+    return new AvailableBooksDto(
+        bookService.countAvailableBooks()
+    );
   }
 }
