@@ -209,4 +209,16 @@ public class BookServiceTest {
 
     verify(bookRepository, never()).deleteById(any());
   }
+
+  @Test
+  void shouldReturnNumberOfAvailableBooks() {
+
+    when(bookRepository.countByIsAvailableTrue()).thenReturn(5L);
+
+    long count = bookService.countAvailableBooks();
+
+    assertEquals(5L, count);
+
+    verify(bookRepository).countByIsAvailableTrue();
+  }
 }
