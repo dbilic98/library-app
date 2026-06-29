@@ -226,11 +226,9 @@ class BookControllerTest {
           }
           """;
 
-      mockMvc.perform(
-              patch("/api/books/1").with(httpBasic("Ana", "password123"))
-                  .contentType("application/json")
-                  .content(requestJson)).andExpect(status().isOk()).andExpect(jsonPath("$.id").value(1))
-          .andExpect(jsonPath("$.name").value("Knjiga"))
+      mockMvc.perform(patch("/api/books/1").with(httpBasic("Ana", "password123"))
+              .contentType("application/json").content(requestJson)).andExpect(status().isOk())
+          .andExpect(jsonPath("$.id").value(1)).andExpect(jsonPath("$.name").value("Knjiga"))
           .andExpect(jsonPath("$.isAvailable").value(true))
           .andExpect(jsonPath("$.author.id").value(1))
           .andExpect(jsonPath("$.author.firstName").value("Ana"))
@@ -254,10 +252,8 @@ class BookControllerTest {
           }
           """;
 
-      mockMvc.perform(
-              patch("/api/books/1").with(httpBasic("Ana", "password123"))
-                  .contentType("application/json")
-                  .content(requestJson)).andExpect(status().isNotFound())
+      mockMvc.perform(patch("/api/books/1").with(httpBasic("Ana", "password123"))
+              .contentType("application/json").content(requestJson)).andExpect(status().isNotFound())
           .andExpect(jsonPath("$.httpStatusCode").value(404))
           .andExpect(jsonPath("$.error").value("Book error"))
           .andExpect(jsonPath("$.errorCode").value(2110))
@@ -276,10 +272,8 @@ class BookControllerTest {
           }
           """;
 
-      mockMvc.perform(
-              patch("/api/books/1").with(httpBasic("Ana", "password123"))
-                  .contentType("application/json")
-                  .content(requestJson)).andExpect(status().isBadRequest())
+      mockMvc.perform(patch("/api/books/1").with(httpBasic("Ana", "password123"))
+              .contentType("application/json").content(requestJson)).andExpect(status().isBadRequest())
           .andExpect(jsonPath("$.httpStatusCode").value(400))
           .andExpect(jsonPath("$.error").value("Validation error"))
           .andExpect(jsonPath("$.errorCode").value(4003)).andExpect(jsonPath("$.message").exists())
@@ -319,6 +313,22 @@ class BookControllerTest {
           .andExpect(jsonPath("$.errorCode").value(2110))
           .andExpect(jsonPath("$.message").value("Book with ID 1 is not found"))
           .andExpect(jsonPath("$.path").value("/api/books/1"));
+    }
+  }
+
+  @Nested
+  class CountAvailableBooks {
+
+    @Test
+    @WithMockUser(username = "Ana", roles = "USER")
+    void shouldReturnAvailableBooksCount() throws Exception {
+
+      Mockito.when(bookService.countAvailableBooks()).thenReturn(5L);
+
+      mockMvc.perform(get("/api/books/count")
+              .with(httpBasic("Ana", "password123")))
+          .andExpect(status().isOk())
+          .andExpect(jsonPath("$.availableBooks").value(5));
     }
   }
 }
