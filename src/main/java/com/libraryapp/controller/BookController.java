@@ -44,14 +44,12 @@ public class BookController {
   }
 
   @GetMapping("/{bookId}")
-  @ResponseStatus(HttpStatus.OK)
   public ResponseBookDto findBookById(@PathVariable("bookId") Long id) {
     Book book = bookService.findBookById(id);
     return toResponseDto(book);
   }
 
   @GetMapping
-  @ResponseStatus(HttpStatus.OK)
   public PaginatedResponse<ResponseBookDto> getPaginatedBooks(
       @RequestParam(defaultValue = "0") int pageNumber,
       @RequestParam(defaultValue = "10") int pageSize) {
@@ -69,7 +67,6 @@ public class BookController {
   }
 
   @PatchMapping("/{bookId}")
-  @ResponseStatus(HttpStatus.OK)
   public ResponseBookDto updateBook(@PathVariable("bookId") Long id,
       @Valid @RequestBody UpdateBookDto updateBookDto) {
     Book updatedBook = bookService.updateBook(id, updateBookDto);
@@ -82,8 +79,7 @@ public class BookController {
     bookService.deleteBook(id);
   }
 
-  @GetMapping("/available/count")
-  @ResponseStatus(HttpStatus.OK)
+  @GetMapping("/count")
   public AvailableBooksDto countAvailableBooks() {
     return new AvailableBooksDto(
         bookService.countAvailableBooks()
