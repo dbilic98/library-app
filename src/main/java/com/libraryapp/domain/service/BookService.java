@@ -61,4 +61,8 @@ public class BookService {
     }
     throw new BookNotFoundException("Book with ID " + id + " is not found");
   }
+
+  public long countAvailableBooks() {
+    return bookRepository.countByIsAvailableTrue();
+  }
 }
