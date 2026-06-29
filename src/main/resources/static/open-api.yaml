@@ -147,6 +147,24 @@ paths:
         '401':
           $ref: "#/components/responses/Unauthorized"
 
+  /api/books/count:
+    get:
+      tags:
+        - book
+      summary: Count available books
+      operationId: countAvailableBooks
+      responses:
+        '200':
+          description: Available books count retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AvailableBooksDto"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '401':
+          $ref: "#/components/responses/Unauthorized"
+
   /api/books/authors/{authorId}:
     post:
       tags:
@@ -408,6 +426,13 @@ components:
           type: string
         isAvailable:
           type: boolean
+
+    AvailableBooksDto:
+      type: object
+      properties:
+        availableBooks:
+          type: integer
+          format: int64
 
     Author:
       type: object
